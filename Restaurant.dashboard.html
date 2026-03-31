@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Хоол Хаяхгүй - Ресторан веб</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f8f7;
+      color: #1f2937;
+    }
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #0f766e;
+      color: white;
+      padding: 24px 18px;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .sublogo {
+      font-size: 13px;
+      opacity: 0.85;
+      margin-bottom: 24px;
+    }
+    .menu-item {
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      background: rgba(255,255,255,0.08);
+      cursor: pointer;
+    }
+    .menu-item:hover {
+      background: rgba(255,255,255,0.16);
+    }
+    .goal-box {
+      margin-top: 30px;
+      background: rgba(255,255,255,0.12);
+      padding: 16px;
+      border-radius: 14px;
+    }
+    .main {
+      flex: 1;
+      padding: 24px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .title {
+      font-size: 30px;
+      font-weight: bold;
+      color: #0f172a;
+    }
+    .subtitle {
+      color: #64748b;
+      margin-top: 6px;
+      font-size: 14px;
+    }
+    .btn {
+      background: #0f766e;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .btn:hover {
+      background: #115e59;
+    }
+    .btn-outline {
+      background: white;
+      color: #0f766e;
+      border: 1px solid #0f766e;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .card {
+      background: white;
+      padding: 18px;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: #64748b;
+      font-weight: normal;
+    }
+    .big {
+      font-size: 28px;
+      font-weight: bold;
+      color: #0f172a;
+    }
+    .hint {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #059669;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+    .chart-box {
+      display: flex;
+      align-items: end;
+      gap: 10px;
+      height: 220px;
+      padding-top: 10px;
+    }
+    .bar-wrap {
+      flex: 1;
+      text-align: center;
+    }
+    .bar {
+      width: 100%;
+      background: #14b8a6;
+      border-radius: 10px 10px 0 0;
+      transition: 0.3s;
+    }
+    .bar-label {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #475569;
+    }
+    .bar-value {
+      font-size: 12px;
+      color: #0f766e;
+      margin-bottom: 6px;
+    }
+    .notice {
+      background: #fff7ed;
+      border-left: 4px solid #f59e0b;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+    }
+    textarea { resize: vertical; min-height: 80px; }
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .row > * {
+      flex: 1;
+      min-width: 180px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+      font-size: 14px;
+    }
+    th {
+      background: #f8fafc;
+      color: #334155;
+    }
+    .badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: #e2e8f0;
+    }
+    .approved { background: #dcfce7; color: #166534; }
+    .pending { background: #fef3c7; color: #92400e; }
+    .rejected { background: #fee2e2; color: #991b1b; }
+    .small-btn {
+      border: none;
+      padding: 7px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-right: 6px;
+    }
+    .approve-btn {
+      background: #0f766e;
+      color: white;
+    }
+    .reject-btn {
+      background: #ef4444;
+      color: white;
+    }
+    .report-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+    }
+    .report-box {
+      background: #f0fdfa;
+      border: 1px solid #99f6e4;
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .report-box h4 {
+      margin: 0 0 8px;
+      color: #0f766e;
+    }
+    .footer-note {
+      margin-top: 24px;
+      font-size: 13px;
+      color: #64748b;
+    }
+    @media (max-width: 900px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="logo">Хоол Хаяхгүй</div>
+    <div class="sublogo">Ресторан удирдлагын веб</div>
+
+    <div class="menu-item">Хяналтын самбар</div>
+    <div class="menu-item">QR баталгаажуулалт</div>
+    <div class="menu-item">Цэс ба порц</div>
+    <div class="menu-item">Урамшуулал</div>
+    <div class="menu-item">Тайлан</div>
+    <div class="menu-item">Тохиргоо</div>
+
+    <div class="goal-box">
+      <div style="font-size:14px;">Энэ сарын зорилт</div>
+      <div style="font-size:34px; font-weight:bold; margin:8px 0;">35%</div>
+      <div style="font-size:13px;">Хүнсний хаягдал бууруулах зорилт</div>
+      <div style="margin-top:10px; background:rgba(255,255,255,0.2); height:10px; border-radius:999px;">
+        <div style="width:68%; height:10px; background:white; border-radius:999px;"></div>
+      </div>
+      <div style="font-size:12px; margin-top:8px;">Одоогийн ахиц: 23%</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="title">Ресторан талаас харагдах веб</div>
+        <div class="subtitle">QR баталгаажуулалт, хаягдлын дата, порцын оновчлол, урамшууллын удирдлага</div>
+      </div>
+      <div class="row" style="max-width:420px;">
+        <select>
+          <option>1-р салбар</option>
+          <option>2-р салбар</option>
+          <option>3-р салбар</option>
+        </select>
+        <button class="btn" onclick="downloadReport()">Өнөөдрийн тайлан</button>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Өнөөдрийн скан</h3>
+        <div class="big" id="scanCount">186</div>
+        <div class="hint">Нийт зочдын 34%</div>
+      </div>
+      <div class="card">
+        <h3>Баталгаажсан оноо</h3>
+        <div class="big" id="pointCount">1240</div>
+        <div class="hint">78 хэрэглэгч оноо авсан</div>
+      </div>
+      <div class="card">
+        <h3>Хаягдал буурсан</h3>
+        <div class="big">23%</div>
+        <div class="hint">Сарын зорилт руу дөхөж байна</div>
+      </div>
+      <div class="card">
+        <h3>Тооцоолсон хэмнэлт</h3>
+        <div class="big">2.16 сая₮</div>
+        <div class="hint">Энэ сард өсөлттэй</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="section-title">7 хоногийн хүнсний хаягдлын тренд</div>
+        <div class="chart-box">
+          <div class="bar-wrap">
+            <div class="bar-value">18кг</div>
+            <div class="bar" style="height: 180px;"></div>
+            <div class="bar-label">Дав</div>
+          </div>
+          <div class="bar-wrap">
+            <div class="bar-value">16кг</div>
+            <div class="bar" style="height: 160px;"></div>
+            <div class="bar-label">Мяг</div>
+          </div>
+          <div class="bar-wrap">
+            <div class="bar-value">14кг</div>
+            <div class="bar" style="height: 140px;"></div>
+            <div class="bar-label">Лха</div>
+          </div>
+          <div class="bar-wrap">
+            <div class="bar-value">13кг</div>
+            <div class="bar" style="height: 130px;"></div>
+            <div class="bar-label">Пүр</div>
+          </div>
+          <div class="bar-wrap">
+            <div class="bar-value">12кг</div>
+            <div class="bar" style="height: 120px;"></div>
+            <div class="bar-label">Баа</div>
+          </div>
+          <div class="bar-wrap">
+            <div class="bar-value">11кг</div>
+            <div class="bar" style="height: 110px;"></div>
+            <div class="bar-label">Бям</div>
+          </div>
+          <div class="bar-wrap">
+            <div class="bar-value">10кг</div>
+            <div class="bar" style="height: 100px;"></div>
+            <div class="bar-label">Ням</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Шуурхай сануулга</div>
+        <div id="noticeList">
+          <div class="notice">Оройн цагаар их порцын үлдэгдэл нэмэгдэж байна.</div>
+          <div class="notice">QR баталгаажуулалтыг кассын хэсэг дээр ажилтнууд сануулна уу.</div>
+        </div>
+        <div style="margin-top: 12px;">
+          <textarea id="noticeInput" placeholder="Шинэ сануулга бич"></textarea>
+          <button class="btn" style="margin-top:10px;" onclick="addNotice()">Нэмэх</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 24px;">
+      <div class="section-title">QR баталгаажуулалт</div>
+      <div class="row" style="margin-bottom: 14px;">
+        <input type="text" id="searchInput" placeholder="ID, хэрэглэгч, хоол..." onkeyup="filterTable()" />
+      </div>
+      <table id="claimTable">
+        <thead>
+          <tr>
+            <th>QR ID</th>
+            <th>Хэрэглэгч</th>
+            <th>Хоол</th>
+            <th>Цаг</th>
+            <th>Төлөв</th>
+            <th>Оноо</th>
+            <th>Үйлдэл</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>QR-1932</td>
+            <td>Б.Анударь</td>
+            <td>Үхрийн махтай сет</td>
+            <td>12:18</td>
+            <td><span class="badge pending">Хүлээгдэж байна</span></td>
+            <td>10</td>
+            <td>
+              <button class="small-btn approve-btn" onclick="approve(this)">Зөвшөөрөх</button>
+              <button class="small-btn reject-btn" onclick="reject(this)">Татгалзах</button>
+            </td>
+          </tr>
+          <tr>
+            <td>QR-1933</td>
+            <td>Т.Өлзий</td>
+            <td>Тахианы шөл</td>
+            <td>12:31</td>
+            <td><span class="badge approved">Баталгаажсан</span></td>
+            <td>10</td>
+            <td>
+              <button class="small-btn approve-btn" onclick="approve(this)">Зөвшөөрөх</button>
+              <button class="small-btn reject-btn" onclick="reject(this)">Татгалзах</button>
+            </td>
+          </tr>
+          <tr>
+            <td>QR-1934</td>
+            <td>С.Эрдэнэ</td>
+            <td>Веган салад</td>
+            <td>13:02</td>
+            <td><span class="badge rejected">Татгалзсан</span></td>
+            <td>0</td>
+            <td>
+              <button class="small-btn approve-btn" onclick="approve(this)">Зөвшөөрөх</button>
+              <button class="small-btn reject-btn" onclick="reject(this)">Татгалзах</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="section-title">Цэс ба порцын удирдлага</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Хоол</th>
+              <th>Порц</th>
+              <th>Хаягдлын хувь</th>
+              <th>Санал</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Үхрийн махтай сет</td>
+              <td>Их</td>
+              <td>21%</td>
+              <td>Дундаж порц нэмэх</td>
+            </tr>
+            <tr>
+              <td>Тахианы шөл</td>
+              <td>Стандарт</td>
+              <td>8%</td>
+              <td>Хэвийн</td>
+            </tr>
+            <tr>
+              <td>Будаатай хуурга</td>
+              <td>Их</td>
+              <td>17%</td>
+              <td>Хачир сонголт салгах</td>
+            </tr>
+            <tr>
+              <td>Веган салад</td>
+              <td>Жижиг</td>
+              <td>5%</td>
+              <td>Хэвийн</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Урамшууллын тохиргоо</div>
+        <div style="margin-bottom: 12px;">
+          <label>Одоогийн дүрэм</label>
+          <input type="text" id="rewardRule" value="100 оноо = 500₮ хөнгөлөлт" />
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label>Урамшуулал идэвхтэй эсэх</label>
+          <select id="rewardStatus">
+            <option value="Идэвхтэй">Идэвхтэй</option>
+            <option value="Идэвхгүй">Идэвхгүй</option>
+          </select>
+        </div>
+        <button class="btn" onclick="saveReward()">Хадгалах</button>
+        <div id="rewardMessage" style="margin-top:12px; color:#0f766e; font-size:14px;"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 24px;">
+      <div class="section-title">Сарын тайлан</div>
+      <div class="report-grid">
+        <div class="report-box">
+          <h4>1-р сар</h4>
+          <div>Хаягдал: -12%</div>
+          <div>Идэвхтэй хэрэглэгч: 214</div>
+          <div>Скан: 698</div>
+          <div>Хэмнэлт: 1,420,000₮</div>
+        </div>
+        <div class="report-box">
+          <h4>2-р сар</h4>
+          <div>Хаягдал: -18%</div>
+          <div>Идэвхтэй хэрэглэгч: 280</div>
+          <div>Скан: 802</div>
+          <div>Хэмнэлт: 1,870,000₮</div>
+        </div>
+        <div class="report-box">
+          <h4>3-р сар</h4>
+          <div>Хаягдал: -23%</div>
+          <div>Идэвхтэй хэрэглэгч: 346</div>
+          <div>Скан: 931</div>
+          <div>Хэмнэлт: 2,160,000₮</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Энэ веб нь ресторан талд QR баталгаажуулалт, хэрэглэгчийн оноо, сарын дата шинжилгээ, хаягдлын бууралтыг хянах зориулалттайгаар танай төслийн үндсэн санаатай нийцүүлэн хялбарчилсан демо хэлбэрээр хийгдсэн. :contentReference[oaicite:1]{index=1}
+    </div>
+  </div>
+</div>
+
+<script>
+  function approve(btn) {
+    const row = btn.parentElement.parentElement;
+    row.cells[4].innerHTML = '<span class="badge approved">Баталгаажсан</span>';
+    row.cells[5].innerText = '10';
+
+    let points = parseInt(document.getElementById('pointCount').innerText);
+    document.getElementById('pointCount').innerText = points + 10;
+  }
+
+  function reject(btn) {
+    const row = btn.parentElement.parentElement;
+    row.cells[4].innerHTML = '<span class="badge rejected">Татгалзсан</span>';
+    row.cells[5].innerText = '0';
+  }
+
+  function addNotice() {
+    const input = document.getElementById('noticeInput');
+    const value = input.value.trim();
+    if (!value) return;
+
+    const box = document.createElement('div');
+    box.className = 'notice';
+    box.innerText = value;
+
+    document.getElementById('noticeList').prepend(box);
+    input.value = '';
+  }
+
+  function filterTable() {
+    const filter = document.getElementById('searchInput').value.toLowerCase();
+    const rows = document.querySelectorAll('#claimTable tbody tr');
+
+    rows.forEach(row => {
+      const text = row.innerText.toLowerCase();
+      row.style.display = text.includes(filter) ? '' : 'none';
+    });
+  }
+
+  function saveReward() {
+    const rule = document.getElementById('rewardRule').value;
+    const status = document.getElementById('rewardStatus').value;
+    document.getElementById('rewardMessage').innerText =
+      'Хадгаллаа: ' + rule + ' | Төлөв: ' + status;
+  }
+
+  function downloadReport() {
+    alert('Тайлан татах demo товч ажиллалаа.');
+  }
+</script>
+
+</body>
+</html>
